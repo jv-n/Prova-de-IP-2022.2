@@ -17,6 +17,42 @@ typedef struct{
 
 } Aluno;
 
+Aluno* carregaAlunos(int *qtdAlunos);
+float* leNotas(int* qtdNotas);
+float calcmedia(float** notas, int qtdNotas);
+void ordena (Aluno** alunos, int qtdAlunos);
+void salvaAlunos(Aluno* alunos, int qtdAlunos);
+
+int main(){
+
+    Aluno* alunos = NULL;
+    int qtdAlunos = 0;
+
+    alunos = carregaAlunos(&qtdAlunos); //vai carregar o arquivo de notas
+    
+    for (int i = 0; i<qtdAlunos; i++)
+    {
+        printf("Digite as notas de %s:\n", alunos[i].nome);
+        alunos[i].qtdNotas = 0;
+        alunos[i].notas = leNotas(&alunos[i].qtdNotas);
+        alunos[i].media = calcmedia(&alunos[i].notas, alunos[i].qtdNotas);
+    }
+
+    ordena(&alunos, qtdAlunos); // ordena o vetor
+
+    salvaAlunos(alunos, qtdAlunos); // salva o vetor em uma file .bin
+
+    printf("Aluno\tCPF\tMEDIA\n"); //printa uma tabela com nome cpf e media do aluno
+    for (int i = 0; i<qtdAlunos; i++)
+    {
+       printf("%s\t%s\t%.1f\n", alunos[i].nome, alunos[i].cpf, alunos[i].media);
+    }
+
+    free(alunos);
+
+    return 0;
+}
+
 Aluno* carregaAlunos(int *qtdAlunos)
 {
     //Considerando o arquivo .txt formatado como: 1 linha do arquivo contem o nome e o cpf do aluno, o cpf nao esta separado por '.' ou '-'//
@@ -126,6 +162,7 @@ void ordena (Aluno** alunos, int qtdAlunos)
     } while(troca == 1); //vai trocar enquanto troca == 1
     
 }
+
 void salvaAlunos(Aluno* alunos, int qtdAlunos)
 {
     FILE* arq;
@@ -135,34 +172,4 @@ void salvaAlunos(Aluno* alunos, int qtdAlunos)
     fwrite(alunos, sizeof(Aluno), qtdAlunos, arq); //vai escrever o conteudo do vetor alunos na file .bin
     fclose(arq); //fecha o arquivo
     printf("Salvo em Arquivo!\n"); //confirmacao de salvo!
-}
-
-int main(){
-
-    Aluno* alunos = NULL;
-    int qtdAlunos = 0;
-
-    alunos = carregaAlunos(&qtdAlunos); //vai carregar o arquivo de notas
-    
-    for (int i = 0; i<qtdAlunos; i++)
-    {
-        printf("Digite as notas de %s:\n", alunos[i].nome);
-        alunos[i].qtdNotas = 0;
-        alunos[i].notas = leNotas(&alunos[i].qtdNotas);
-        alunos[i].media = calcmedia(&alunos[i].notas, alunos[i].qtdNotas);
-    }
-
-    ordena(&alunos, qtdAlunos); // ordena o vetor
-
-    salvaAlunos(alunos, qtdAlunos); // salva o vetor em uma file .bin
-
-    printf("Aluno\tCPF\tMEDIA\n"); //printa uma tabela com nome cpf e media do aluno
-    for (int i = 0; i<qtdAlunos; i++)
-    {
-       printf("%s\t%s\t%.1f\n", alunos[i].nome, alunos[i].cpf, alunos[i].media);
-    }
-
-    free(alunos);
-
-    return 0;
 }
