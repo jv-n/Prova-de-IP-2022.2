@@ -1,6 +1,4 @@
 //Joao Victor da Silva Nascimento
-//login jvsn2
-//cpf 13129762418
 
 #include <stdio.h>
 #include <stdlib.h>
